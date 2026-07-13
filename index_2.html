@@ -1630,29 +1630,61 @@ function filterInvites(q) {
 }
 window.filterInvites = filterInvites;
 
-/* ── Musique (fichier local) ── */
+/* ── Musique — autoplay au chargement ── */
 const mb = document.getElementById('musicBtn');
 let au = null, playing = false;
+
+function initAudio() {
+  if (!CONFIG.MUSIC_URL || au) return;
+  au = new Audio(CONFIG.MUSIC_URL);
+  au.loop   = true;
+  au.volume = 0.30;
+}
+
+function startMusic() {
+  initAudio();
+  if (!au) return;
+  au.play().then(() => {
+    playing = true;
+    if (mb) {
+      mb.classList.add('on');
+      mb.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+  }).catch(() => {
+    // Autoplay bloqué par le navigateur — sera lancé au premier toucher
+  });
+}
+
+function stopMusic() {
+  if (!au) return;
+  au.pause();
+  playing = false;
+  if (mb) {
+    mb.classList.remove('on');
+    mb.innerHTML = '<i class="fas fa-music"></i>';
+  }
+}
+
+// 1. Tenter l'autoplay dès le chargement
+window.addEventListener('load', () => {
+  if (CONFIG.MUSIC_URL) startMusic();
+});
+
+// 2. Fallback : démarrer au premier toucher si autoplay bloqué
+function onFirstInteraction() {
+  if (CONFIG.MUSIC_URL && !playing) startMusic();
+  document.removeEventListener('touchstart', onFirstInteraction);
+  document.removeEventListener('click',      onFirstInteraction);
+}
+document.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
+document.addEventListener('click',      onFirstInteraction, { once: true });
+
+// 3. Bouton toggle play/pause
 if (mb) {
-  mb.addEventListener('click', () => {
+  mb.addEventListener('click', (e) => {
+    e.stopPropagation(); // éviter double déclenchement avec onFirstInteraction
     if (!CONFIG.MUSIC_URL) return;
-    if (!au) {
-      au = new Audio(CONFIG.MUSIC_URL);
-      au.loop   = true;
-      au.volume = 0.30;
-    }
-    if (playing) {
-      au.pause();
-      playing = false;
-      mb.classList.remove('on');
-      mb.innerHTML = '<i class="fas fa-music"></i>';
-    } else {
-      au.play().then(() => {
-        playing = true;
-        mb.classList.add('on');
-        mb.innerHTML = '<i class="fas fa-pause"></i>';
-      }).catch(() => {});
-    }
+    if (playing) stopMusic(); else startMusic();
   });
 }
 
