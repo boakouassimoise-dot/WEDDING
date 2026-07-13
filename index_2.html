@@ -1632,7 +1632,7 @@ window.filterInvites = filterInvites;
 
 /* ── Musique (fichier local) ── */
 const mb = document.getElementById('musicBtn');
-let au = null, playing = false;
+let au = null, playing = true;
 if (mb) {
   mb.addEventListener('click', () => {
     if (!CONFIG.MUSIC_URL) return;
