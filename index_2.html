@@ -1222,6 +1222,40 @@ button:focus-visible,a:focus-visible,[role="button"]:focus-visible,
           </div>
         </div>
       </div>
+
+      <!-- ── Mobile Money ── -->
+      <div class="gift-sep" style="margin-top:1rem;">
+        <div class="gift-sep-line"></div>
+        <span class="gift-sep-label">Mobile Money</span>
+        <div class="gift-sep-line"></div>
+      </div>
+      <div class="pay-card om" style="margin-bottom:.85rem;">
+        <div class="pay-hd">
+          <div class="pay-logo om-l">OM</div>
+          <div class="pay-lbl">
+            <strong>Orange Money</strong>
+            <span>07 07 11 28 54</span>
+          </div>
+        </div>
+        <button class="pay-btn" onclick="payAction('om')">
+          <i class="fas fa-phone" id="om-ico"></i>
+          <span id="om-lbl">Composer via Orange Money</span>
+        </button>
+      </div>
+      <div class="pay-card wv">
+        <div class="pay-hd">
+          <div class="pay-logo wv-l">W~</div>
+          <div class="pay-lbl">
+            <strong>Wave</strong>
+            <span>07 07 11 28 54</span>
+          </div>
+        </div>
+        <button class="pay-btn" style="background:#00AF96;color:#fff;" onclick="payAction('wv')">
+          <i class="fas fa-phone" id="wv-ico"></i>
+          <span id="wv-lbl">Composer via Wave</span>
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
